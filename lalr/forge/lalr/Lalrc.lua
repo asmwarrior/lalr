@@ -11,7 +11,10 @@ end
 
 function Lalrc.build( forge, target )
     local lalrc = target:implicit_dependency();
-    forge:system( lalrc, ('lalrc -o "%s" "%s"'):format(target, target:dependency()) );
-    local lalrc = forge:interpolate( forge.settings.lalr.lalrc );
-    target:add_implicit_dependency( forge:Target(lalrc) );
+    target:clear_implicit_dependencies();
+    target:add_implicit_dependency( lalrc );
+
+    local filename = target:filename();
+    printf( forge:leaf(filename) );
+    forge:system( lalrc, ('lalrc -o "%s" "%s"'):format(filename, target:dependency()) );
 end
